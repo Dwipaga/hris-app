@@ -43,16 +43,29 @@ class Menu extends Model
     /**
      * Get the menu roles for the menu.
      */
-    public function menuRoles(): HasMany
+    /**
+     * Get the parent menu.
+     */
+    public function parent()
     {
-        return $this->hasMany(MenuRole::class, 'menu_id', 'menu_id');
+        return $this->belongsTo(Menu::class, 'menu_parent', 'menu_id');
     }
 
     /**
      * Get the child menus.
      */
-    public function children(): HasMany
+    public function children()
     {
         return $this->hasMany(Menu::class, 'menu_parent', 'menu_id');
     }
+
+    /**
+     * Get the user groups that have access to this menu.
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'menu_roles', 'menu_id', 'group_id');
+    }
+
+  
 }
